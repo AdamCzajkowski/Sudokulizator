@@ -54,13 +54,21 @@ public class Generate {
 	public static List s9 = new ArrayList(9);
 	public static List[] squaresList = new List[] {s1,s2,s3,s4,s5,s6,s7,s8,s9};
 
-	public static int[] numberOfFreeSquare = new int[] {0,3,8};
-
+	public static int[] numberOfFreeSquare = new int[] {0,4,8};
+    public static int[] startValueOfSudokuSquars = new int[] {0,3,6};
+	public static int[] numbersStart = new int[] {0,3,6};
+	public static int[] numbersEnd = new int[] {2,5,8};
+	public static int iteration = 0;
+	final static int LIMIT = 50;
 
 	public static void fullZero() {
 		for (int row = 0; row < 9; row++) {
 			for (int column = 0; column < 9; column++){
 				sudoku[row][column] = '0';
+				squaresList[row].clear();
+				rowsList[row].clear();
+				columnsList[column].clear();
+
 			}
 		}
 	}
@@ -71,22 +79,113 @@ public class Generate {
 		return element;
 	}
 
+	public static void generateIISquares() {
+		for (int i = 0; i <=3; i=i+3) {
+			for (int row = 3 + i; row <= 5+i; row++) {
+				for (int column = 0; column < 3; column++) {
+					sudoku[row][column] = randomElement();
+					if (!((squaresList[3+i].contains(sudoku[row][column]))) && !(rowsList[row].contains(sudoku[row][column])) && !(columnsList[column].contains(sudoku[row][column])) ) {
+						squaresList[3+i].add(sudoku[row][column]);
+						rowsList[row].add(sudoku[row][column]);
+						columnsList[column].add(sudoku[row][column]);
+						iteration = 0;
+					} else {
+						column--;
+						Show.showSudoku();
+						iteration++;
+						if (iteration > LIMIT){
+							generate();
+
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public static void generateIIISquares() {
+		for (int i = 0; i <=3; i=i+3) {
+			for (int row = 0 + i; row <= 2+i; row++) {
+				for (int column = 6; column <= 8; column++) {
+					sudoku[row][column] = randomElement();
+					if (!((squaresList[2+i].contains(sudoku[row][column]))) && !(rowsList[row].contains(sudoku[row][column])) && !(columnsList[column].contains(sudoku[row][column])) ) {
+						squaresList[2+i].add(sudoku[row][column]);
+						rowsList[row].add(sudoku[row][column]);
+						columnsList[column].add(sudoku[row][column]);
+						iteration = 0;
+						continue;
+					} else {
+						column--;
+						Show.showSudoku();
+						iteration++;
+						if (iteration > LIMIT){
+							generate();
+
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public static void generateIVSquares() {
+		for (int i = 0; i <=6; i=i+6) {
+			for (int row = 0 + i; row <= 3+i; row++) {
+				for (int column = 3; column <= 5; column++) {
+					sudoku[row][column] = randomElement();
+					if (!((squaresList[1+i].contains(sudoku[row][column]))) && !(rowsList[row].contains(sudoku[row][column])) && !(columnsList[column].contains(sudoku[row][column])) ) {
+						squaresList[1+i].add(sudoku[row][column]);
+						rowsList[row].add(sudoku[row][column]);
+						columnsList[column].add(sudoku[row][column]);
+						iteration = 0;
+						continue;
+					} else {
+						column--;
+						//Show.showSudoku();
+						iteration++;
+						if (iteration > LIMIT){
+							generate();
+
+						}
+					}
+				}
+			}
+		}
+	}
+
 	public static void generate3FreeSquares() {
-	    for (int freeSquare = 0; freeSquare <=2; freeSquare++) {
-            for (int row = 0; row < 3; row++) {
-                for (int column = 0; column < 3; column++) {
-                    sudoku[row][column] = randomElement();
-                    if (!((squaresList[numberOfFreeSquare[freeSquare]].contains(sudoku[row][column])))) {
-                        squaresList[numberOfFreeSquare[freeSquare]].add(sudoku[row][column]);
-                        continue;
-                    } else {
-                        column--;
-                    }
+		for (int i = 0; i <=2; i++) {
+			for (int row = 0 + startValueOfSudokuSquars[i]; row < 3+startValueOfSudokuSquars[i]; row++) {
+				for (int column = 0 +startValueOfSudokuSquars[i]; column < 3+startValueOfSudokuSquars[i]; column++) {
+					sudoku[row][column] = randomElement();
+					if (!((squaresList[numberOfFreeSquare[i]].contains(sudoku[row][column])))) {
+						squaresList[numberOfFreeSquare[i]].add(sudoku[row][column]);
+						rowsList[row].add(sudoku[row][column]);
+						columnsList[column].add(sudoku[row][column]);
+						iteration = 0;
+					} else {
+						column--;
+						iteration++;
+						if (iteration > LIMIT){
+							generate();
 
-                }
-            }
-        }
+						}
+					}
+
+				}
+			}
+		}
 	}
 
 
+	public static void generate() {
+		fullZero();
+		generate3FreeSquares();
+		generateIISquares();
+		generateIIISquares();
+		generateIVSquares();
 	}
+	}
+
+
+

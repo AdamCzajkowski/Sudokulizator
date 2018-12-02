@@ -9,6 +9,7 @@ public class Show {
             System.out.println(" ");
         }
         System.out.println("\n");
+        System.out.println(Generate.iteration);
     }
 
 
